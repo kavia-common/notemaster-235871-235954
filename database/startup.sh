@@ -142,6 +142,15 @@ export POSTGRES_DB="${DB_NAME}"
 export POSTGRES_PORT="${DB_PORT}"
 EOF
 
+# Initialize app schema + seed data (idempotent)
+echo ""
+echo "Initializing application schema + seed data..."
+chmod +x ./init_schema_and_seed.sh 2>/dev/null || true
+./init_schema_and_seed.sh || {
+    echo "⚠ Schema/seed initialization failed"
+    exit 1
+}
+
 echo "PostgreSQL setup complete!"
 echo "Database: ${DB_NAME}"
 echo "User: ${DB_USER}"
